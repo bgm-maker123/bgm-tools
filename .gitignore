@@ -1,0 +1,6 @@
+# 動画メーカーの素材と完成品は GitHub に上げない
+video-maker/input/*
+!video-maker/input/ここに曲と画像を入れてください.txt
+video-maker/output/*
+!video-maker/output/ここに動画ができます.txt
+video-maker/tools/.work/
