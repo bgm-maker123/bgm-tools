@@ -1,0 +1,31 @@
+{
+  "channelName": "BGMチャンネル 投稿記録",
+
+  "videos": [
+    {
+      "date": "",
+      "theme": "オーロラの夜空",
+      "title": "オーロラの夜空",
+      "fullUrl": "https://youtu.be/FKC3xpv7oGU",
+      "shortUrl": "https://youtube.com/shorts/6aMo-z_bGIY",
+      "views": "",
+      "retention": "",
+      "memo": ""
+    }
+  ],
+
+  "nextThemes": [
+    {
+      "theme": "（例）雪の降る夜のカフェ",
+      "memo": "オーロラと同じ「夜・冬」系。ここは自由に書き換えてください"
+    }
+  ],
+
+  "sunoPrompts": [
+    {
+      "name": "（例）オーロラの夜空",
+      "prompt": "ambient piano, soft synth pads, slow tempo, calm, dreamy, night sky, instrumental",
+      "memo": "ここに使ったプロンプトやコツをメモしておけます"
+    }
+  ]
+}
