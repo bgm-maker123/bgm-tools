@@ -1,0 +1,6 @@
+__pycache__/
+.pytest_cache/
+# 作品データ・出力物・売上記録は個人データなのでコミットしない
+works/
+dist/
+sales.csv

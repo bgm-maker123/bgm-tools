@@ -1,0 +1,61 @@
+# 販売サイトごとの出力設定
+#
+# 数値は目安です。各サイトの規約・推奨サイズは変わることがあるので、
+# 登録前に公式の出品ガイドを確認して、ここを書き換えてください。
+
+[common]
+# サンプル画像に入れる透かしの文字
+watermark_text = "SAMPLE"
+# 日本語の透かしを入れたいときは日本語フォントのパスを指定する
+# 例: "C:/Windows/Fonts/meiryo.ttc"  /  "/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc"
+font_path = ""
+# 透かしの濃さ (0-255)
+watermark_opacity = 70
+# モザイクの1マスの大きさ = 長辺 × mosaic_ratio (最低 mosaic_min_px)
+# 一般的な目安は「長辺の1/100以上、最低4px」。サイトの基準がこれより厳しければ上げる
+mosaic_ratio = 0.01
+mosaic_min_px = 4
+jpeg_quality = 92
+# 画像に埋め込まれた生成パラメータ(プロンプト等)やEXIFを削除する
+strip_metadata = true
+# これより小さい画像は警告を出す (長辺px)
+min_long_side = 1000
+
+[sites.dlsite]
+name = "DLsite"
+# メイン画像 (幅, 高さ)
+cover_size = [560, 420]
+# サンプル画像の長辺
+sample_long_side = 1280
+sample_count = 5
+sample_watermark = true
+# サンプル画像全体にもモザイク/ぼかしをかけるか: "none" / "blur" / "mosaic"
+sample_filter = "none"
+# 販売ファイル: "zip" = 本編をZIPにまとめる / "none" = 作らない
+product = "zip"
+product_image_format = "png"
+template = "dlsite.txt"
+
+[sites.fanza]
+name = "FANZA同人"
+cover_size = [560, 420]
+sample_long_side = 1280
+sample_count = 5
+sample_watermark = true
+sample_filter = "none"
+product = "zip"
+product_image_format = "png"
+template = "fanza.txt"
+
+[sites.yahoo]
+name = "ヤフオク"
+# ヤフオクは正方形のメイン画像が見やすい
+cover_size = [1200, 1200]
+sample_long_side = 1200
+sample_count = 9
+sample_watermark = true
+sample_filter = "none"
+# ヤフオクは印刷物(アクスタ・ポスター等)での出品を想定し、データ本編は作らない
+product = "none"
+product_image_format = "png"
+template = "yahoo.txt"

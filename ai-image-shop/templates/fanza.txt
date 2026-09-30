@@ -1,0 +1,15 @@
+【作品名】$title
+【サークル】$circle
+
+$summary
+
+■ 収録内容
+$contents
+
+■ 生成AIの使用について
+$ai_notice
+
+$adult_notice
+
+■ ジャンル・タグ候補
+$tags
