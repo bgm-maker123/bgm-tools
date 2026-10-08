@@ -38,7 +38,11 @@ def to_rgb(img: Image.Image) -> Image.Image:
 
 def fit_cover(img: Image.Image, size: tuple[int, int], focus_y: float = 0.4) -> Image.Image:
     """切り抜いて指定サイズちょうどにする。focus_y は縦の切り抜き位置 (0=上端, 0.5=中央, 1=下端)。"""
-    return ImageOps.fit(img, size, Image.LANCZOS, centering=(0.5, focus_y))
+    out = ImageOps.fit(img, size, Image.LANCZOS, centering=(0.5, focus_y))
+    # 大きく縮小すると眠い印象になるので、軽くシャープをかける
+    if max(img.size) > max(size) * 2:
+        out = out.filter(ImageFilter.UnsharpMask(radius=1, percent=60, threshold=2))
+    return out
 
 
 def resize_long_side(img: Image.Image, long_side: int) -> Image.Image:
@@ -110,6 +114,7 @@ def watermark(img: Image.Image, text: str, font_path: str = "", opacity: int = 7
 def save(img: Image.Image, path: Path, quality: int = 92) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.suffix.lower() in (".jpg", ".jpeg"):
-        to_rgb(img).save(path, "JPEG", quality=quality, optimize=True)
+        # subsampling=0 で色のにじみを防ぐ (小さい画像で特に効く)
+        to_rgb(img).save(path, "JPEG", quality=quality, optimize=True, subsampling=0)
     else:
         img.save(path, optimize=True)
