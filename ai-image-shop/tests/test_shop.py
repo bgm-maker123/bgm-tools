@@ -119,3 +119,29 @@ def test_sales_summary(tmp_path):
     assert s["by_site"]["dlsite"] == [1100, 330, 770]
     assert list(s["by_month"]) == ["2026-09", "2026-10"]
     assert "合計" in sales.format_summary(s)
+
+
+def test_split_grid_uneven_tiles(tmp_path):
+    from shoptools import grid
+
+    # 幅がバラバラな 3×3 のまとめ画像 (コマごとに色が違う)
+    widths, height = [90, 120, 100], 150
+    img = Image.new("RGB", (sum(widths), height * 3))
+    for r in range(3):
+        x = 0
+        for c, w in enumerate(widths):
+            img.paste((r * 80 + 20, c * 80 + 20, 128), (x, r * height, x + w, (r + 1) * height))
+            x += w
+    tiles = grid.split(img, 3, 3, trim=0)
+    assert [t.width for t in tiles[:3]] == widths
+    assert all(t.height == height for t in tiles)
+    assert tiles[4].getpixel((0, 0)) == (100, 100, 128)
+
+    src = tmp_path / "grid.png"
+    img.save(src)
+    out = tmp_path / "images"
+    assert shop.main(["split", str(src), str(out)]) == 0
+    assert len(list(out.glob("*.png"))) == 9
+    # 2回目は続きの番号から
+    assert shop.main(["split", str(src), str(out)]) == 0
+    assert (out / "018.png").exists()

@@ -2,6 +2,7 @@
 """AI生成画像の販売準備ツール.
 
   python shop.py init    works/作品A                       作品フォルダのひな形を作る
+  python shop.py split   grid.png works/作品A/images --rows 3 --cols 3   まとめ画像を1枚ずつに切り分ける
   python shop.py package works/作品A                       サイト別の販売用一式を作る
   python shop.py describe works/作品A --site dlsite        説明文だけ表示する
   python shop.py sales add --site dlsite --title 作品A --price 550 --fee 165
@@ -16,7 +17,7 @@ import shutil
 import sys
 from pathlib import Path
 
-from shoptools import config, listing, package, sales
+from shoptools import config, grid, images, listing, package, sales
 
 EXAMPLES = config.ROOT / "examples"
 DEFAULT_SALES = config.ROOT / "sales.csv"
@@ -35,6 +36,22 @@ def cmd_init(args: argparse.Namespace) -> None:
     print(f"\n次にやること:\n  1. {work_dir / 'images'} に販売する画像を入れる\n"
           f"  2. {work_dir / 'work.toml'} に作品情報を書く\n"
           f"  3. python shop.py package {work_dir}")
+
+
+def cmd_split(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out_dir)
+    start = args.start
+    if start is None:
+        start = len(images.list_images(out_dir)) + 1 if out_dir.exists() else 1
+    img = images.strip_metadata(images.load(Path(args.grid)))
+    for i, tile in enumerate(grid.split(img, args.rows, args.cols, args.trim), start):
+        dest = out_dir / f"{i:03d}.png"
+        if dest.exists():
+            raise ValueError(f"{dest} は既にあります (--start で番号を変えてください)")
+        images.save(tile, dest)
+        print(f"作成: {dest}  ({tile.width}×{tile.height})")
+        if max(tile.size) < 1000:
+            print(f"  [注意] 長辺 {max(tile.size)}px は販売用には小さいです")
 
 
 def cmd_package(args: argparse.Namespace) -> None:
@@ -84,6 +101,15 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("init", help="作品フォルダのひな形を作る")
     p.add_argument("work_dir")
     p.set_defaults(func=cmd_init)
+
+    p = sub.add_parser("split", help="まとめ画像 (3×3 など) を1枚ずつに切り分ける")
+    p.add_argument("grid", help="まとめ画像のファイル")
+    p.add_argument("out_dir", help="出力先 (例: works/作品A/images)")
+    p.add_argument("--rows", type=int, default=3)
+    p.add_argument("--cols", type=int, default=3)
+    p.add_argument("--trim", type=int, default=2, help="境目のにじみを削る幅 px (既定: 2)")
+    p.add_argument("--start", type=int, help="連番の開始番号 (省略時は続きから)")
+    p.set_defaults(func=cmd_split)
 
     p = sub.add_parser("package", help="サイト別の販売用一式を作る")
     p.add_argument("work_dir")
