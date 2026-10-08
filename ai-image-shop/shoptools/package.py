@@ -75,6 +75,9 @@ def build_site(site_id: str, site: dict, work: dict, prepared: list, out_dir: Pa
         raise ValueError(f"表紙に指定した {cover_name} が見つかりません")
     cover = images.fit_cover(cover_src or prepared[0][1], tuple(site["cover_size"]), work.get("cover_focus", 0.4))
     images.save(cover, site_dir / "cover.jpg", quality)
+    if "thumb_size" in site:
+        thumb = images.fit_cover(cover_src or prepared[0][1], tuple(site["thumb_size"]), work.get("cover_focus", 0.4))
+        images.save(thumb, site_dir / "thumbnail.jpg", quality)
 
     # サンプル画像
     for i, (_, img) in enumerate(pick_evenly(prepared, site["sample_count"]), 1):

@@ -25,6 +25,8 @@ min_long_side = 1000
 name = "DLsite"
 # メイン画像 (幅, 高さ)
 cover_size = [560, 420]
+# サムネイル画像 (正方形)
+thumb_size = [300, 300]
 # サンプル画像の長辺
 sample_long_side = 1280
 sample_count = 5

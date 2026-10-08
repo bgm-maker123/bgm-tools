@@ -82,6 +82,7 @@ def test_package_end_to_end(tmp_path):
     for site in ("dlsite", "fanza", "yahoo"):
         assert (dist / site / "description.txt").exists()
         assert Image.open(dist / site / "cover.jpg").size in ((560, 420), (1200, 1200))
+    assert Image.open(dist / "dlsite" / "thumbnail.jpg").size == (300, 300)
     assert len(list((dist / "dlsite" / "samples").glob("*.jpg"))) == 5
     assert max(Image.open(dist / "dlsite" / "samples" / "sample_01.jpg").size) == 1280
     assert not (dist / "yahoo" / "作品タイトル.zip").exists()
