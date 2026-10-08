@@ -10,6 +10,8 @@ tool = "Stable Diffusion"
 adult = false
 # メイン画像に使うファイル名 (省略すると images/ の1枚目)
 # cover = "001.png"
+# メイン画像の縦の切り抜き位置 (0=上端, 0.5=中央, 1=下端)。顔や頭が切れるときは小さくする
+# cover_focus = 0.4
 
 summary = """
 ここに作品の紹介文を書きます。

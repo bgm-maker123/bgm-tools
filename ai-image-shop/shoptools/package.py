@@ -73,7 +73,7 @@ def build_site(site_id: str, site: dict, work: dict, prepared: list, out_dir: Pa
     cover_src = dict(prepared).get(cover_name) if cover_name else None
     if cover_name and cover_src is None:
         raise ValueError(f"表紙に指定した {cover_name} が見つかりません")
-    cover = images.fit_cover(cover_src or prepared[0][1], tuple(site["cover_size"]))
+    cover = images.fit_cover(cover_src or prepared[0][1], tuple(site["cover_size"]), work.get("cover_focus", 0.4))
     images.save(cover, site_dir / "cover.jpg", quality)
 
     # サンプル画像

@@ -36,9 +36,9 @@ def to_rgb(img: Image.Image) -> Image.Image:
     return bg
 
 
-def fit_cover(img: Image.Image, size: tuple[int, int]) -> Image.Image:
-    """中央を基準に切り抜いて指定サイズちょうどにする。"""
-    return ImageOps.fit(img, size, Image.LANCZOS, centering=(0.5, 0.4))
+def fit_cover(img: Image.Image, size: tuple[int, int], focus_y: float = 0.4) -> Image.Image:
+    """切り抜いて指定サイズちょうどにする。focus_y は縦の切り抜き位置 (0=上端, 0.5=中央, 1=下端)。"""
+    return ImageOps.fit(img, size, Image.LANCZOS, centering=(0.5, focus_y))
 
 
 def resize_long_side(img: Image.Image, long_side: int) -> Image.Image:
