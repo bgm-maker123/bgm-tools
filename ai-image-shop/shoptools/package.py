@@ -80,7 +80,15 @@ def build_site(site_id: str, site: dict, work: dict, prepared: list, out_dir: Pa
         images.save(thumb, site_dir / "thumbnail.jpg", quality)
 
     # サンプル画像
-    for i, (_, img) in enumerate(pick_evenly(prepared, site["sample_count"]), 1):
+    if work.get("samples"):
+        by_name = dict(prepared)
+        missing = [n for n in work["samples"] if n not in by_name]
+        if missing:
+            raise ValueError(f"サンプルに指定した画像が見つかりません: {', '.join(missing)}")
+        picked = [(n, by_name[n]) for n in work["samples"]]
+    else:
+        picked = pick_evenly(prepared, site["sample_count"])
+    for i, (_, img) in enumerate(picked, 1):
         sample = images.resize_long_side(img, site["sample_long_side"])
         if site["sample_filter"] == "mosaic":
             block = images.mosaic_block_size(sample, site["mosaic_ratio"] * 3, site["mosaic_min_px"])

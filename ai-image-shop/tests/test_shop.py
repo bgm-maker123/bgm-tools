@@ -146,3 +146,12 @@ def test_split_grid_uneven_tiles(tmp_path):
     # 2回目は続きの番号から
     assert shop.main(["split", str(src), str(out)]) == 0
     assert (out / "018.png").exists()
+
+
+def test_package_uses_selected_samples(tmp_path):
+    work_dir = make_work(tmp_path, n=4)
+    toml = (work_dir / "work.toml").read_text(encoding="utf-8")
+    (work_dir / "work.toml").write_text('samples = ["002.png", "004.png"]\n' + toml, encoding="utf-8")
+    assert shop.main(["package", str(work_dir), "--site", "dlsite"]) == 0
+    samples = list((work_dir / "dist" / "作品タイトル" / "dlsite" / "samples").glob("*.jpg"))
+    assert len(samples) == 2
